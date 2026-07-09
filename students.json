@@ -1,0 +1,20 @@
+[
+    {
+        "student_id": "STU-1001",
+        "name": "Abaseen",
+        "roll": 202447,
+        "age": 21,
+        "department": "Software Engineering",
+        "semester": 4,
+        "marks": [
+            82.0,
+            76.0,
+            79.0,
+            65.0,
+            79.0
+        ],
+        "admission_date": "2026-07-09",
+        "admission_time": "12:27:36",
+        "admission_datetime": "2026-07-09 12:27:36"
+    }
+]
