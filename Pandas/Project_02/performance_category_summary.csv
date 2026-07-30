@@ -1,0 +1,7 @@
+,total_score,total_score,total_score,total_score,weekly_self_study_hours,attendance_percentage,class_participation
+,count,mean,min,max,mean,mean,mean
+performance_category,,,,,,,
+Needs Improvement,193857,59.4,9.4,70.0,6.59,84.73,5.98
+Average,162897,75.31,70.1,80.0,11.31,84.71,5.98
+Good,193820,85.09,80.1,90.0,14.27,84.7,5.99
+Excellent,449426,97.92,90.1,100.0,20.34,84.7,5.99
