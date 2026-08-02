@@ -1,7 +1,7 @@
 #======================== Lesson 08: Colors, Color Codes & Multiple Styling Options ======================#
 import matplotlib.pyplot as plt
 
-months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+months = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 income = [30, 35, 45, 50, 65, 75]
 expenses = [20, 25, 30, 35, 40, 50]
 
@@ -22,7 +22,7 @@ plt.plot(
     linewidth=3,
     marker="s",
     alpha=0.7,
-    label='Expenses'
+    label='Monthly Expenses '
 )
 plt.title('Icome VS Expenses')
 plt.xlabel('Months')
@@ -30,3 +30,4 @@ plt.ylabel('Amount (Thousands)')
 plt.grid()
 plt.legend()
 plt.show()
+print(f'The Matplot Programm runned successfully')
