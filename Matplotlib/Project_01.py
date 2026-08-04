@@ -3,6 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
+import sys
+import io
+
+# Set UTF-8 encoding for console output
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Set style for better visualizations
 plt.style.use('seaborn-v0_8-darkgrid')
@@ -64,16 +69,16 @@ def explore_data(df):
     print("=" * 60)
     
     # Basic info
-    print("\n📊 Dataset Info:")
+    print("\n[INFO] Dataset Info:")
     print(df.info())
     
-    print("\n📈 Summary Statistics:")
+    print("\n[INFO] Summary Statistics:")
     print(df.describe())
     
-    print("\n🔍 Missing Values:")
+    print("\n[INFO] Missing Values:")
     print(df.isnull().sum())
     
-    print("\n📋 Data Types:")
+    print("\n[INFO] Data Types:")
     print(df.dtypes)
     
     return df
@@ -104,7 +109,7 @@ def clean_data(df):
         for col in categorical_cols:
             df[col].fillna(df[col].mode()[0], inplace=True)
     
-    print("✅ Data cleaning complete!")
+    print("[OK] Data cleaning complete!")
     return df
 
 # ============================================
@@ -117,25 +122,25 @@ def analyze_data(df):
     print("=" * 60)
     
     # 4.1 Sales Analysis by Category
-    print("\n📊 Sales by Category:")
+    print("\n[ANALYSIS] Sales by Category:")
     category_stats = df.groupby('category').agg({
         'sales': ['mean', 'sum', 'std', 'count']
     }).round(2)
     print(category_stats)
     
     # 4.2 Time-based Analysis
-    print("\n📈 Monthly Sales Analysis:")
+    print("\n[ANALYSIS] Monthly Sales Analysis:")
     monthly_sales = df.groupby('month')['sales'].agg(['mean', 'sum']).round(2)
     print(monthly_sales)
     
     # 4.3 Correlation Analysis
-    print("\n🔗 Correlation Matrix:")
+    print("\n[ANALYSIS] Correlation Matrix:")
     numeric_cols = ['sales', 'customers', 'marketing_spend']
     correlation = df[numeric_cols].corr()
     print(correlation.round(3))
     
     # 4.4 Weekend vs Weekday Analysis
-    print("\n📅 Weekend vs Weekday Sales:")
+    print("\n[ANALYSIS] Weekend vs Weekday Sales:")
     weekend_stats = df.groupby('is_weekend')['sales'].agg(['mean', 'median', 'std']).round(2)
     print(weekend_stats)
     
@@ -221,7 +226,7 @@ def create_visualizations(df):
     plt.tight_layout()
     plt.savefig('data_analysis_visualizations.png', dpi=300, bbox_inches='tight')
     plt.show()
-    print("✅ Visualizations saved as 'data_analysis_visualizations.png'")
+    print("[OK] Visualizations saved as 'data_analysis_visualizations.png'")
 
 # ============================================
 # 6. ADVANCED ANALYSIS
@@ -255,7 +260,7 @@ def advanced_analysis(df):
                                  columns='category', 
                                  aggfunc='mean')
     
-    print("\n📊 Category Performance by Month (Average Sales):")
+    print("\n[ANALYSIS] Category Performance by Month (Average Sales):")
     print(pivot_table.round(2))
     
     # 6.7 Statistical Tests
@@ -266,7 +271,7 @@ def advanced_analysis(df):
     weekday_sales = df[~df['is_weekend']]['sales']
     t_stat, p_value = stats.ttest_ind(weekend_sales, weekday_sales)
     
-    print(f"\n📈 Weekend vs Weekday Sales T-Test:")
+    print(f"\n[ANALYSIS] Weekend vs Weekday Sales T-Test:")
     print(f"T-statistic: {t_stat:.4f}")
     print(f"P-value: {p_value:.4f}")
     print(f"Significant difference: {'Yes' if p_value < 0.05 else 'No'}")
@@ -283,7 +288,7 @@ def generate_report(df, pivot_table):
     print("=" * 60)
     
     report = f"""
-    📊 DATA ANALYSIS SUMMARY REPORT
+    DATA ANALYSIS SUMMARY REPORT
     ================================
     
     Dataset Overview:
@@ -316,23 +321,33 @@ def generate_report(df, pivot_table):
     
     print(report)
     
-    # Save report to file
-    with open('analysis_report.txt', 'w') as f:
-        f.write(report)
-    print("✅ Report saved as 'analysis_report.txt'")
+    # Save report to file with UTF-8 encoding
+    try:
+        with open('analysis_report.txt', 'w', encoding='utf-8') as f:
+            f.write(report)
+        print("[OK] Report saved as 'analysis_report.txt'")
+    except Exception as e:
+        # Fallback to ASCII-only report if UTF-8 fails
+        print(f"Warning: Could not save with UTF-8 encoding. Trying ASCII...")
+        try:
+            with open('analysis_report.txt', 'w', encoding='ascii', errors='ignore') as f:
+                f.write(report)
+            print("[OK] Report saved as 'analysis_report.txt' (ASCII only)")
+        except:
+            print("[ERROR] Could not save report file")
 
 # ============================================
 # MAIN EXECUTION
 # ============================================
 def main():
     """Main function to run the complete analysis"""
-    print("🚀 Starting Data Analysis Program...")
+    print("Starting Data Analysis Program...")
     print("=" * 60)
     
     # Step 1: Create data
-    print("\n📦 Creating sample dataset...")
+    print("\n[INFO] Creating sample dataset...")
     df = create_sample_data()
-    print(f"✅ Dataset created with {len(df)} records")
+    print(f"[OK] Dataset created with {len(df)} records")
     
     # Step 2: Explore data
     df = explore_data(df)
@@ -353,8 +368,8 @@ def main():
     generate_report(df, pivot_table)
     
     print("\n" + "=" * 60)
-    print("✅ Analysis Complete!")
-    print("📁 Files generated:")
+    print("[OK] Analysis Complete!")
+    print("Files generated:")
     print("   - data_analysis_visualizations.png")
     print("   - analysis_report.txt")
     print("=" * 60)

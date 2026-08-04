@@ -1,0 +1,45 @@
+
+    DATA ANALYSIS SUMMARY REPORT
+    ================================
+    
+    Dataset Overview:
+    - Total Records: 365
+    - Date Range: 2023-01-01 00:00:00 to 2023-12-31 00:00:00
+    - Total Sales: $73,169.89
+    - Average Sales: $200.47
+    - Median Sales: $200.29
+    - Max Sales: $350.96
+    - Min Sales: $34.42
+    
+    Customer Metrics:
+    - Total Customers: 23,319
+    - Average Customers per Day: 63.89
+    - Sales per Customer (Avg): $3.21
+    
+    Marketing Metrics:
+    - Total Marketing Spend: $456,313.64
+    - Average Marketing ROI: 18.62%
+    
+    Category Performance:
+                   mean       sum
+category                     
+Books        199.70  12381.19
+Clothing     197.04  17536.40
+Electronics  197.68  21546.94
+Food         207.88  15383.26
+Toys         203.94   6322.09
+    
+    Best Performing Months:
+    month
+12    291.891949
+11    279.651421
+10    260.489719
+Name: sales, dtype: float64
+    
+    Worst Performing Months:
+    month
+1    104.212008
+2    121.958454
+3    141.202766
+Name: sales, dtype: float64
+    
