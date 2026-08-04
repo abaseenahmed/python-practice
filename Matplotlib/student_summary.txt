@@ -1,0 +1,27 @@
+
+    STUDENT PERFORMANCE SUMMARY
+    =============================
+    
+    Total Students: 100
+    Average Overall Score: 69.7/100
+    
+    GRADE DISTRIBUTION:
+    A: 0 students (0.0%)
+    B: 7 students (7.0%)
+    C: 41 students (41.0%)
+    D: 47 students (47.0%)
+    F: 5 students (5.0%)
+    
+    GENDER BREAKDOWN:
+    Male: 50 students (Avg Score: 70.3)
+    Female: 50 students (Avg Score: 69.1)
+    
+    STUDY HOURS INSIGHTS:
+    Students studying 5+ hours/day: 27
+    Average score for 5+ hours: 70.6
+    Students studying 2 or less hours: 45
+    Average score for 2 or less hours: 68.5
+    
+    BEST PERFORMING SUBJECT: english (76.0)
+    WORST PERFORMING SUBJECT: art (62.9)
+    
