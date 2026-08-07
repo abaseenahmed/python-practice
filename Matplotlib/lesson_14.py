@@ -19,4 +19,4 @@ plt.xlabel('Months')
 plt.ylabel('Revenue (Thousands)')
 
 plt.savefig('monthly_revenue.png', dpi=300, bbox_inches="tight")
-plt.show()
+plt.show() 
