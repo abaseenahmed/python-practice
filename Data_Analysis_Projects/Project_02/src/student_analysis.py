@@ -205,3 +205,186 @@ detect_outliers('study_hours')
 detect_outliers('attendance')
 detect_outliers('previous_score')
 
+header('Visualization')
+# visualizations and graphs of dataset
+# final score distribution
+plt.figure(figsize=(10, 6), dpi=120)
+plt.hist(df['final_score'], bins=20, color='skyblue', edgecolor='black')
+plt.title('Final Score Distribution', fontsize=16)
+plt.xlabel('Final Score', fontsize=14)
+plt.ylabel('Number of Students', fontsize=14)
+plt.grid(axis='y', alpha=0.75)
+plt.savefig('../visualizations/final_score_distribution.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Study hours vs final score Scatter plot
+plt.figure(figsize=(10, 6), dpi=120)
+plt.scatter(df['study_hours'], df['final_score'], alpha=0.5, color='orange', edgecolor='red')
+plt.title('Study Hours vs Final Score', fontsize=16)
+plt.xlabel('Study Hours', fontsize=14)
+plt.ylabel('Final Score', fontsize=14)
+plt.grid()
+plt.savefig('../visualizations/study_hours_vs_final_score.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Attendance vs final score Scatter plot
+plt.figure(figsize=(10, 6), dpi=120)
+plt.scatter(df['attendance'], df['final_score'], alpha=0.5, color='blue', edgecolor='black')
+plt.title('Attendance vs Final Score', fontsize=16)
+plt.xlabel('Attendance', fontsize=14)
+plt.ylabel('Final Score', fontsize=14)
+plt.grid()
+plt.savefig('../visualizations/attendance_vs_final_score.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Previous score vs final score Scatter plot
+plt.figure(figsize=(10, 6), dpi=120)
+plt.scatter(df['previous_score'], df['final_score'], alpha=0.5, color='green', edgecolor='black')
+plt.title('Previous Score vs Final Score', fontsize=16)
+plt.xlabel('Previous Score', fontsize=14)
+plt.ylabel('Final Score', fontsize=14)
+plt.grid()
+plt.savefig('../visualizations/previous_score_vs_final_score.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Average score by study group bar chart
+plt.figure(figsize=(10, 6), dpi=120)
+plt.bar(
+    df.groupby('study_group')['final_score'].mean().index,
+    df.groupby('study_group')['final_score'].mean().values,
+    color=['red', 'orange', 'yellow', 'green'],
+    linewidth=1.5
+)
+plt.title('Average Final Score by Study Group', fontsize=16)
+plt.xlabel('Study Group', fontsize=14)
+plt.ylabel('Average Final Score', fontsize=14)
+plt.grid(axis='y', alpha=0.75)
+plt.savefig('../visualizations/average_score_by_study_groups.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Average score by parental support bar chart
+plt.figure(figsize=(10, 6), dpi=120)
+plt.bar(
+    df.groupby('parental_support')['final_score'].mean().index,
+    df.groupby('parental_support')['final_score'].mean().values,
+    color='teal',
+)
+plt.title('Average Final Score by Parental Support', fontsize=16)
+plt.xlabel('Parental Support', fontsize=14)
+plt.ylabel('Average Final Score', fontsize=14)
+plt.grid(axis='y', alpha=0.75)
+plt.savefig('../visualizations/average_score_by_parental_support.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Performance category distribution
+plt.figure(figsize=(10, 6), dpi=120)
+category_means = df.groupby('performance_category')['final_score'].mean()
+plt.bar(category_means.index, category_means.values, color='purple')
+plt.title('Final Marks By Performance Category Distribution', fontsize=16)
+plt.xlabel('Performance Category', fontsize=14)
+plt.ylabel('Final Score', fontsize=14)
+plt.grid(axis='y', alpha=0.75)
+plt.savefig('../visualizations/average_score_by_performance_category.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Academic risk distribution
+plt.figure(figsize=(10, 6), dpi=120)
+risk_category_means = df.groupby('risk_category')['final_score'].mean()
+plt.bar(risk_category_means.index, risk_category_means.values, color='brown')
+plt.title('Final Marks By Risk Category Distribution', fontsize=16)
+plt.xlabel('Risk Category', fontsize=14)
+plt.ylabel('Final Score', fontsize=14)
+plt.grid(axis='y', alpha=0.75)
+plt.savefig('../visualizations/academic_risk_distribution.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+header('Correlation Visualization')
+matrix_data = np.column_stack((df['study_hours'], df['attendance'], df['sleep_hours'], df['previous_score'], df['final_score']))
+corr_matrix = np.corrcoef(matrix_data, rowvar=False)
+print(corr_matrix)
+
+cols = ['study_hours', 'attendance', 'sleep_hours', 'previous_score', 'final_score']
+matrix_data = df[cols].corr()
+
+fig, ax = plt.subplots(figsize=(10, 6), dpi=120)
+image = ax.imshow(matrix_data, cmap='coolwarm', vmin=-1, vmax=1)
+cbar = ax.figure.colorbar(image, ax=ax)
+cbar.ax.set_ylabel("Correlation Coefficient", rotation=-90, va="bottom")
+
+ticks = np.arange(len(cols))
+ax.set_xticks(ticks)
+ax.set_yticks(ticks)
+ax.set_xticklabels(cols)
+ax.set_yticklabels(cols)
+
+for i in range(len(cols)):
+    for j in range(len(cols)):
+        ax.text(j, i, f"{matrix_data.iloc[i, j]:.2f}",
+                ha="center", va="center", color="black")
+
+ax.set_title("Correlation Matrix Heatmap")
+plt.tight_layout()
+plt.savefig('../visualizations/correlation_matrix.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Final dashboard
+header('Final dashboard')
+
+fig, ax = plt.subplots(3, 2, figsize=(8, 6), dpi=120)
+
+ax[0, 0].hist(df['final_score'], bins=20, color='skyblue', edgecolor='black')
+ax[0, 0].set_title('Final Score Distribution', fontsize=16)
+ax[0, 0].set_xlabel('Final Score', fontsize=14)
+ax[0, 0].set_ylabel('Number of Students', fontsize=14)
+ax[0, 0].grid(axis='y', alpha=0.75) 
+
+ax[0, 1].scatter(df['study_hours'], df['final_score'], alpha=0.5, color='orange', edgecolor='red')
+ax[0, 1].set_title('Study Hours vs Final Score', fontsize=16)
+ax[0, 1].set_xlabel('Study Hours', fontsize=14)
+ax[0, 1].set_ylabel('Final Score', fontsize=14)
+ax[0, 1].grid() 
+
+ax[1, 0].scatter(df['attendance'], df['final_score'], alpha=0.5, color='blue', edgecolor='black')
+ax[1, 0].set_title('Attendance vs Final Score', fontsize=16)
+ax[1, 0].set_xlabel('Attendance', fontsize=14)
+ax[1, 0].set_ylabel('Final Score', fontsize=14)
+ax[1, 0].grid()
+
+ax[1, 1].bar(
+    df.groupby('study_group')['final_score'].mean().index,
+    df.groupby('study_group')['final_score'].mean().values,
+    color=['red', 'orange', 'yellow', 'green'],
+    linewidth=1.5
+)
+ax[1, 1].set_title('Average Final Score by Study Group', fontsize=16)
+ax[1, 1].set_xlabel('Study Group', fontsize=14)
+ax[1, 1].set_ylabel('Average Final Score', fontsize=14)
+ax[1, 1].grid(axis='y', alpha=0.75)
+
+risk_category_means = df.groupby('risk_category')['final_score'].mean()
+ax[2, 0].bar(risk_category_means.index, risk_category_means.values, color='brown')
+ax[2, 0].set_title('Final Marks By Risk Category Distribution', fontsize=16)
+ax[2, 0].set_xlabel('Risk Category', fontsize=14)
+ax[2, 0].set_ylabel('Final Score', fontsize=14)
+ax[2, 0].grid(axis='y', alpha=0.75)
+
+ax[2, 1].imshow(matrix_data, cmap='prism', vmin=-1, vmax=1)
+ax[2, 1].set_ylabel("Correlation Coefficient", rotation=-90, va="bottom")
+ticks = np.arange(len(cols))
+ax[2, 1].set_xticks(ticks)
+ax[2, 1].set_yticks(ticks)
+ax[2, 1].set_xticklabels(cols)
+ax[2, 1].set_yticklabels(cols)
+
+for i in range(len(cols)):
+    for j in range(len(cols)):
+        ax[2, 1].text(j, i, f"{matrix_data.iloc[i, j]:.2f}",
+                ha="center", va="center", color="black")
+
+ax[2, 1].set_title("Correlation Matrix Heatmap")
+plt.tight_layout()
+plt.savefig('../visualizations/student_performance_dashboard.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+header('Thank You For Using Student Performance Analysis Tool')
+print('This tool is developed by Abaseen Ahmed. For customization please contact me.')
