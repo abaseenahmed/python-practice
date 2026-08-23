@@ -72,3 +72,52 @@ HAVING COUNT(*) > 1
 ORDER BY customer_count DESC;
 -- From -> Where -> Group By -> Having -> Select -> Order By
 
+
+-- Question No. 1: The difference between select * and select first_name, country From customer is that the select * selects all the rows and columns of the table customer while the select first_name, country selects only these two columns from the customer table
+-- Question No. 2: The DISTINCT select only the unique elements from selected columns or table.
+-- Question No. 3: The SELECT DISTINCT country, age selects all the distinct combinations of these two columns
+-- Question No. 4: The WHERE age = NULL is wrong because the null values can not selected in this way it can be selected as WHERE age is null
+-- Question No. 5: The null represents the unknown or missing value in table
+-- Question No. 6: The COALESCE(age, 0) sets the values of age 0, in each row where age is null
+-- Question No. 7: The correct order is GROUP BY -> WHERE -> SELECT 
+-- 
+
+
+-- Task 1
+SELECT first_name, last_name, country
+FROM customers
+
+-- Task 2
+SELECT DISTINCT country
+FROM customers
+
+-- Task 3
+SELECT first_name, age, age + 1 AS age_next_year
+FROM customers
+
+-- Task 4
+SELECT customer_id, first_name, age
+WHERE age is NULL
+FROM customers
+
+-- Task 5
+SELECT customer_id, first_name, email
+WHERE email is NULL
+FROM customers
+
+-- Task 6
+SELECT first_name, COALESCE(age, 'Unknown') AS age
+FROM customers
+
+-- Task 7
+SELECT first_name, country
+WHERE country = 'Pakistan'
+FROM customers
+
+-- Task 8
+SELECT country, COUNT(*) AS customer_count
+FROM customers
+WHERE age >= 25
+GROUP BY country
+HAVING COUNT(*) > 2
+ORDER BY customer_count ASC;
