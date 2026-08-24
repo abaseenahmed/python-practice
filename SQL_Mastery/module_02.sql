@@ -82,6 +82,6 @@ AND email IS NOT NULL;
 -- Task 11
 SELECT customer_id, first_name, country, age, email 
 FROM customers
-WHERE ((country = 'Pakistan' OR country = 'USA') AND (age >= 35))
+WHERE (country = 'Pakistan' OR country = 'USA')
 OR ((country = 'Canada') AND (age >= 35));
 
