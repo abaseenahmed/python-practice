@@ -75,3 +75,133 @@ SELECT
 FROM subscriptions
 GROUP BY DATE_TRUNC('month', subscription_date)
 ORDER BY month;
+
+-- Task 02: Monthly Subscription Count
+SELECT 
+    DATE_TRUNC('month', subscription_date) AS month,
+    COUNT(subscription_id) AS subscription_count
+FROM subscriptions
+GROUP BY DATE_TRUNC('month', subscription_date)
+ORDER BY subscription_count;
+
+-- Task 03: Previous Month Revenue
+SELECT 
+    DATE_TRUNC('month', subscription_date) AS month,
+    SUM(amount) AS monthly_revenue,
+    LAG(SUM(amount)) OVER (
+        ORDER BY DATE_TRUNC('month', subscription_date)
+    ) AS prev_month_revenue
+FROM subscriptions
+GROUP BY DATE_TRUNC('month', subscription_date);   
+
+-- Task 04: Monthly Revenue Change
+WITH monthly_revenue_change AS (
+    SELECT
+        DATE_TRUNC('month', subscription_date) AS month,
+        SUM(amount) AS monthly_revenue,
+        LAG (SUM(amount)) OVER (
+            ORDER BY DATE_TRUNC('month', subscription_date)
+        ) AS prev_month_revenue
+    FROM subscriptions
+    GROUP BY month
+)
+SELECT 
+    month,
+    monthly_revenue_change.monthly_revenue,
+    monthly_revenue_change.prev_month_revenue,
+    monthly_revenue_change.monthly_revenue - monthly_revenue_change.prev_month_revenue AS revenue_change
+FROM monthly_revenue_change;
+
+-- Task 05: Monthly Revenue Growth %
+WITH monthly_growth AS (
+    SELECT
+        DATE_TRUNC('month', subscription_date) AS month,
+        SUM(amount) AS monthly_revenue,
+        LAG (SUM(amount)) OVER (
+            ORDER BY DATE_TRUNC('month', subscription_date)
+        ) AS prev_month_revenue
+    FROM subscriptions
+    GROUP BY month
+)
+
+SELECT 
+    month,
+    monthly_growth.monthly_revenue,
+    monthly_growth.prev_month_revenue,
+    (monthly_growth.monthly_revenue - monthly_growth.prev_month_revenue) / monthly_growth.prev_month_revenue * 100
+FROM monthly_growth;
+
+-- Task 06: Running Revenue
+WITH running_revenue AS (
+    SELECT
+        DATE_TRUNC('month', subscription_date) AS month,
+        SUM(amount) AS monthly_revenue
+    from subscriptions
+    GROUP BY month
+)
+SELECT
+    month,
+    monthly_revenue,
+    SUM(monthly_revenue) OVER (
+        ORDER BY month
+    ) AS running_revenue
+FROM running_revenue;
+
+-- Task 07: Customer Previous Payment
+WITH prev_payment AS (
+    SELECT 
+        subscriptions.customer_id,
+        customer_name,
+        subscription_date,
+        amount
+    FROM saas_customers
+    INNER JOIN subscriptions
+    ON saas_customers.customer_id = subscriptions.customer_id
+)
+SELECT 
+    customer_name,
+    subscription_date,
+    amount,
+    LAG (amount) OVER (
+        PARTITION BY customer_id
+        ORDER BY subscription_date
+    ) AS prev_payment
+FROM prev_payment;
+
+-- Task 08: Customer Payment Difference 
+WITH payment_diff AS (
+    SELECT 
+        subscriptions.customer_id,
+        customer_name,
+        subscription_date,
+        amount,
+        LAG (amount) OVER (
+            PARTITION BY subscriptions.customer_id
+            ORDER BY subscription_date
+        ) AS prev_payment
+    FROM saas_customers
+    INNER JOIN subscriptions
+    ON saas_customers.customer_id = subscriptions.customer_id
+)
+SELECT 
+    customer_name,
+    subscription_date,
+    amount,
+    prev_payment,
+    amount - prev_payment AS payment_difference
+FROM payment_diff;
+
+-- highest-revenue month.
+WITH monthly_revenue AS (
+    SELECT
+        DATE_TRUNC('month', subscription_date) AS month,
+        SUM(amount) AS revenue
+    FROM subscriptions
+    GROUP BY DATE_TRUNC('month', subscription_date)
+)
+SELECT
+    month,
+    revenue
+FROM monthly_revenue
+ORDER BY revenue DESC
+LIMIT 1;
