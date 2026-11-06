@@ -1,0 +1,51 @@
+HOUSE PRICE DATASET — EDA AND CLEANING REPORT
+====================================================
+
+Dataset scope
+- Raw observations and fields: 4,600 rows x 18 columns
+- Cleaned observations and fields: 4,551 rows x 18 columns
+- Sale date range: 2014-05-02 to 2014-07-10
+- Exact duplicate rows found: 0
+- Missing cells in raw input: 0
+
+Target analysis
+- Non-positive/missing sale-price rows removed: 49
+- Median positive sale price: $465,000
+- Mean positive sale price: $557,906
+- Positive-price skewness: 25.02
+- Positive-price range: $7,800 to $26,590,000
+- Price observations beyond the 1.5xIQR fences: 240 (5.22%)
+
+Data quality findings and treatment
+- Rows removed for exact duplication: 0.
+- Rows excluded for a non-positive/missing target: 49.
+- Invalid sale dates removed: 0.
+- Invalid renovation years (before construction or after sale): 193; treated as no reliable renovation evidence.
+- Zero bedroom values set to missing: 2.
+- Zero bathroom values set to missing: 2.
+- `street` was excluded because it is a near-unique address identifier; `country` was excluded because it is constant.
+- Sale date was decomposed into sale year/month; construction and renovation years were represented as house age, a renovation indicator, and years since renovation.
+- Missing feature values are retained. Fit imputers on training folds only to avoid validation/test leakage.
+
+Potential outliers
+- IQR fences are a screening device, not proof of data error. No positive-price observations were removed solely for being extreme.
+- Inspect the extreme-price and large-lot records against source/business context before deciding on a transformation, robust loss, or exclusion rule.
+
+Geographic coverage
+- Most frequent cities: Seattle (1,573), Renton (293), Bellevue (286), Redmond (235), Issaquah (187)
+
+Training recommendations
+- Define `price` as the target and use a train/validation/test split before fitting imputation, scaling, encoding, or feature selection.
+- Keep `city` and `statezip` as categorical features and encode them inside a training pipeline; check category coverage in held-out data.
+- Evaluate target skew and residuals; compare a raw-price model with a log-target approach using metrics reported in dollars.
+- Consider a geographic-aware split or grouped validation because homes in nearby areas can share pricing patterns.
+
+Generated artifacts
+- data/cleaned_house_prices.csv
+- reports/missing_values.csv, reports/numeric_summary.csv,
+  reports/categorical_summary.csv, reports/iqr_outliers.csv
+- visualizations/house_price_eda_dashboard.png
+
+Remaining missing model features
+- bedrooms: 2 (0.04%)
+- bathrooms: 2 (0.04%)

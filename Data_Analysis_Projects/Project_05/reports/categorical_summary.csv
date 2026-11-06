@@ -1,0 +1,5 @@
+column,unique_values,most_frequent_value,most_frequent_count
+street,4525,2520 Mulberry Walk NE,4
+city,44,Seattle,1573
+statezip,77,WA 98103,148
+country,1,USA,4600
