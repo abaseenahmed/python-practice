@@ -34,6 +34,12 @@ The script uses NumPy, pandas, Matplotlib, and Seaborn to:
    model table while retaining city and ZIP code.
 6. Save a diagnostic dashboard, audit tables, a text report, and cleaned CSV.
 
+The Seaborn dashboard compares the sale-price distribution, living area and
+price, city-level median prices, feature correlations, remaining missing values,
+and sale-price distributions by bedroom count. The bedroom boxplots use a
+logarithmic price axis, include categories with at least 10 homes, and hide
+individual outlier markers so the typical price ranges remain readable.
+
 Missing feature values are intentionally retained. Fit imputation, scaling, and
 categorical encoders on training data only (ideally in a scikit-learn pipeline)
 to prevent data leakage. IQR outliers are reported, not automatically removed:

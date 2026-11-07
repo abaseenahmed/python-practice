@@ -223,7 +223,7 @@ def create_dashboard(frame: pd.DataFrame, output_path: Path) -> None:
     """Save a six-panel EDA dashboard using the cleaned observations."""
     fig, axes = plt.subplots(3, 2, figsize=(15, 17))
     fig.suptitle("House Prices | Exploratory Data Analysis", fontsize=18, weight="bold")
-    ax_price, ax_area, ax_city, ax_corr, ax_missing, ax_month = axes.flat
+    ax_price, ax_area, ax_city, ax_corr, ax_missing, ax_bedrooms = axes.flat
 
     sns.histplot(
         data=frame,
@@ -334,27 +334,29 @@ def create_dashboard(frame: pd.DataFrame, output_path: Path) -> None:
         ax_missing.set_xlabel("Rows missing (%)")
         ax_missing.set_ylabel("")
 
-    monthly = (
-        frame.groupby("sale_month", observed=True)[TARGET]
-        .agg(["median", "count"])
-        .reset_index()
+    bedroom_counts = frame["bedrooms"].value_counts()
+    supported_bedrooms = sorted(bedroom_counts.loc[bedroom_counts.ge(10)].index)
+    bedroom_data = frame.loc[frame["bedrooms"].isin(supported_bedrooms)]
+    sns.boxplot(
+        data=bedroom_data,
+        x="bedrooms",
+        y=TARGET,
+        order=supported_bedrooms,
+        showfliers=False,
+        color="#76B7B2",
+        ax=ax_bedrooms,
     )
-    sns.lineplot(
-        data=monthly,
-        x="sale_month",
-        y="median",
-        marker="o",
-        linewidth=2.5,
-        color="#4E79A7",
-        ax=ax_month,
+    ax_bedrooms.set_yscale("log")
+    ax_bedrooms.set_title("Sale price by bedrooms (log scale; outliers hidden)")
+    ax_bedrooms.set_xlabel("Bedrooms (sample size)")
+    ax_bedrooms.set_ylabel("Sale price ($, log scale)")
+    ax_bedrooms.set_xticks(
+        range(len(supported_bedrooms)),
+        labels=[
+            f"{int(bedrooms)}\n(n={int(bedroom_counts[bedrooms]):,})"
+            for bedrooms in supported_bedrooms
+        ],
     )
-    ax_month.set_title("Median sale price by month")
-    ax_month.set_xlabel("Sale month")
-    ax_month.set_ylabel("Median sale price ($)")
-    ax_month.yaxis.set_major_formatter(
-        plt.FuncFormatter(lambda value, _: f"${value / 1_000:,.0f}k")
-    )
-    ax_month.set_xticks(sorted(monthly["sale_month"].unique()))
 
     fig.tight_layout(rect=(0, 0, 1, 0.97))
     output_path.parent.mkdir(parents=True, exist_ok=True)
